@@ -1,0 +1,14 @@
+{
+    "name": "aplicacion",
+    "description": "proyecto de php7",
+    "authors": [
+        {
+            "name": "edwin luis",
+            "email": "luis.edwin06@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/database": "*",
+        "illuminate/events": "^7.9"
+    }
+}
