@@ -1,11 +1,13 @@
 <?php
-
+use core\Response;
 class FrontController
 {
 
     public function index()
     {
-        echo "<h1>Hola desde index</h1>";
+
+        Response::render('index');
+
     }
 
 }
