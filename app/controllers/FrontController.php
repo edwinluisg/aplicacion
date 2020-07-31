@@ -1,5 +1,6 @@
 <?php
 use core\Response;
+
 class FrontController
 {
 
