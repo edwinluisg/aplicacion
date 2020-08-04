@@ -12,67 +12,76 @@ class Request
     {
 
         foreach (self::$form as $key => $value) {
-            $nombre_form = explode("|", $key);
-            $name = $nombre_form[0];
-            $alias = $nombre_form[1];
-            $reglas_form = explode("|", $value);
-            foreach ($reglas_form as $regla) {
+            $datosInput = explode("|", $key);
+            $name = $datosInput[0];
+            $alias = $datosInput[1];
+            $reglasInput = explode("|", $value);
+            foreach ($reglasInput as $regla) {
                 $ref = false;
-                $param_form = explode(":", $regla);
-                $regla = $param_form[0];
+                $parametrosInput = explode(":", $regla);
+                $regla = $parametrosInput[0];
                 $parametro = null;
-                if (count($param_form) > 1) {
-                    $parametro = $param_form[1];
+                if (count($parametrosInput) > 1) {
+                    $parametro = $parametrosInput[1];
                 }
-                $value = trim($_REQUEST[$name]);
                 switch ($regla) {
                     case 'requerido':
-                        if (!self::requerido($name, $alias, $value)) {
+                        if (!self::requerido($name, $alias)) {
                             $ref = true;
                         }
                         break;
                     case 'cadena':
-                        if (!self::cadena($name, $alias, $value)) {
+                        if (!self::cadena($name, $alias)) {
                             $ref = true;
                         }
                         break;
                     case 'email':
-                        if (!self::email($name, $alias, $value)) {
+                        if (!self::email($name, $alias)) {
                             $ref = true;
                         }
                         break;
                     case 'entero':
-                        if (!self::entero($name, $alias, $value)) {
+                        if (!self::entero($name, $alias)) {
                             $ref = true;
                         }
                         break;
                     case 'fecha':
-                        if (!self::fecha($name, $alias, $value)) {
+                        if (!self::fecha($name, $alias)) {
                             $ref = true;
                         }
                         break;
                     case 'edad':
-                        if (!self::edad($name, $alias, $value)) {
+                        if (!self::edad($name, $alias)) {
                             $ref = true;
                         }
                         break;
                     case 'menorque':
-                        if (!self::menorque($name, $alias, $value, $parametro)) {
+                        if (!self::menorque($name, $alias, $parametro)) {
                             $ref = true;
                         }
                         break;
                     case 'mayorque':
-                        if (!self::mayorque($name, $alias, $value, $parametro)) {
+                        if (!self::mayorque($name, $alias, $parametro)) {
                             $ref = true;
                         }
                         break;
                     case 'mayorigualque':
-                        if (!self::mayorigualque($name, $alias, $value, $parametro)) {
+                        if (!self::mayorigualque($name, $alias, $parametro)) {
                             $ref = true;
                         }
                         break;
                     case 'largomin':
-                        if (!self::largomin($name, $alias, $value, $parametro)) {
+                        if (!self::largomin($name, $alias, $parametro)) {
+                            $ref = true;
+                        }
+                        break;
+                    case 'imagenrequerido':
+                        if (!self::imagenrequerido($name, $alias)) {
+                            $ref = true;
+                        }
+                        break;
+                    case 'imagen':
+                        if (!self::imagen($name, $alias)) {
                             $ref = true;
                         }
                         break;
@@ -94,9 +103,9 @@ class Request
 
     }
 
-    public static function requerido($name, $alias, $value)
+    public static function requerido($name, $alias)
     {
-
+        $value = trim($_REQUEST[$name]);
         $resp = true;
         $mensaje = '';
         if ($value == null or $value == "") {
@@ -109,14 +118,14 @@ class Request
 
     }
 
-    public static function cadena($name, $alias, $value)
+    public static function cadena($name, $alias)
     {
-
+        $value = trim($_REQUEST[$name]);
         $resp = true;
         $mensaje = '';
         if ($value != '') {
             if (!preg_match("/^(?!-+)[a-zA-Z-ñáéíóú ]*$/", $value)) {
-                $mensaje = 'El campo ' . $alias . ' debe ser una cadena';
+                $mensaje = 'El campo ' . $alias . ' debe ser una cadena de texto';
                 self::$errors_cont++;
                 $resp = false;
             }
@@ -126,9 +135,9 @@ class Request
 
     }
 
-    public static function email($name, $alias, $value)
+    public static function email($name, $alias)
     {
-
+        $value = trim($_REQUEST[$name]);
         $resp = true;
         $mensaje = '';
         if ($value != '') {
@@ -143,9 +152,9 @@ class Request
 
     }
 
-    public static function entero($name, $alias, $value)
+    public static function entero($name, $alias)
     {
-
+        $value = trim($_REQUEST[$name]);
         $resp = true;
         $mensaje = '';
         if ($value != '') {
@@ -160,9 +169,9 @@ class Request
 
     }
 
-    public static function fecha($name, $alias, $value)
+    public static function fecha($name, $alias)
     {
-
+        $value = trim($_REQUEST[$name]);
         $resp = true;
         $mensaje = '';
         if ($value != '') {
@@ -184,9 +193,9 @@ class Request
 
     }
 
-    public static function edad($name, $alias, $value)
+    public static function edad($name, $alias)
     {
-
+        $value = trim($_REQUEST[$name]);
         $resp = true;
         $mensaje = '';
         if ($value != '') {
@@ -229,9 +238,9 @@ class Request
 
     }
 
-    public static function menorque($name, $alias, $value, $parametro)
+    public static function menorque($name, $alias, $parametro)
     {
-
+        $value = trim($_REQUEST[$name]);
         $resp = true;
         $mensaje = '';
         if ($value != '') {
@@ -246,8 +255,9 @@ class Request
 
     }
 
-    public static function mayorque($name, $alias, $value, $parametro)
+    public static function mayorque($name, $alias, $parametro)
     {
+        $value = trim($_REQUEST[$name]);
         $resp = true;
         $mensaje = '';
         if ($value != '') {
@@ -261,9 +271,9 @@ class Request
         return $resp;
     }
 
-    public static function mayorigualque($name, $alias, $value, $parametro)
+    public static function mayorigualque($name, $alias, $parametro)
     {
-
+        $value = trim($_REQUEST[$name]);
         $resp = true;
         $mensaje = '';
         if ($value != '') {
@@ -278,14 +288,14 @@ class Request
 
     }
 
-    public static function largomin($name, $alias, $value, $parametro)
+    public static function largomin($name, $alias, $parametro)
     {
-
+        $value = trim($_REQUEST[$name]);
         $resp = true;
         $mensaje = '';
         if ($value != '') {
             if (strlen($value) <= $parametro) {
-                $mensaje = 'El campo ' . $alias . ' debe tener una lungitud mayor a ' . $parametro . ' caracteres';
+                $mensaje = 'El campo ' . $alias . ' debe tener una longitud mayor a ' . $parametro . ' caracteres';
                 self::$errors_cont++;
                 $resp = false;
             }
@@ -293,6 +303,50 @@ class Request
         self::$errors[$name] = $mensaje;
         return $resp;
 
+    }
+
+    public static function imagenrequerido($name, $alias)
+    {
+        $file = $_FILES[$name];
+        $resp = false;
+        $mensaje = '';
+        if (isset($file)) {
+            if ($file["error"] <= 0) {
+                $resp = true;
+            }
+        }
+        if (!$resp) {
+            $mensaje = 'El campo ' . $alias . ' es obligatorio';
+            self::$errors_cont++;
+        }
+        self::$errors[$name] = $mensaje;
+        return $resp;
+    }
+
+    public static function imagen($name, $alias)
+    {
+        $file = $_FILES[$name];
+        $resp = true;
+        $mensaje = '';
+        if (isset($file)) {
+            if ($file["error"] <= 0) {
+                $resp = false;
+                $extencion = pathinfo($file["name"])['extension'];
+                $array = array("jpg", "jpeg", "png", "JPG", "JPEG", "PNG");
+                foreach ($array as $value) {
+                    if ($value == $extencion) {
+                        $resp = true;
+                        break;
+                    }
+                }
+                if (!$resp) {
+                    $mensaje = 'El campo ' . $alias . ' debe tener un formato de imagen correcto';
+                    self::$errors_cont++;
+                }
+            }
+        }
+        self::$errors[$name] = $mensaje;
+        return $resp;
     }
 
 }
